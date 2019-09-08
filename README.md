@@ -1,6 +1,10 @@
 # pagination
 
-A new Flutter project.
+This is a rework of the original Tensor Programming Flutter navigation project.
+I think there is a much simpler solution than his original solution.
+No need for streams, stream-builders, rx-dart, scroll notifications.
+When I learned how brilliantly sliver list handles unbound lists, I think forward and backward paging can be done easily.
+My idea is just load up to three pages altogether in memory. When a HTTP request is pending no any other request is allowed. When backward paging, I'd keep the previous page in memory, but when the user starts paging in that direction I'd start loading the previous page, dropping the trailing pages at the sae time, So eventually three pages would be kept in memory.
 
 ## Getting Started
 
