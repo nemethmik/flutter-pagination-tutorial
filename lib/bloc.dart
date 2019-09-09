@@ -8,7 +8,7 @@ class PhotoBloc {
   int get firstAlbum => photos.isEmpty ? 1 : photos[0].albumId;  
   int get lastAlbum => photos.isEmpty ? 1 : photos.last.albumId;
   List<Photo> photos = []; //page size = phtoros.length
-  Future<Photo> getPhoto(int index) async {
+  Future<Photo> _getPhoto(int index) async {
     if(photos.isEmpty) {
       await loadPhotos(firstAlbum,index); 
     }
@@ -27,5 +27,11 @@ class PhotoBloc {
       photos.addAll(await api.getPhotos(albumId));
       print("==== loadPhotos exit: albumId $albumId index $index FA $firstAlbum LA $lastAlbum S ${photos.length}");
     }
+  }
+  Future<Photo> syncLock;// VERY IMPORTANT TO serve list view items sequentially
+  Future<Photo> getPhoto(int index) async {
+    if(syncLock != null) await syncLock; // Check out what's happening, if you uncomment this
+    syncLock = _getPhoto(index);
+    return await syncLock;
   }
 }

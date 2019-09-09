@@ -2,7 +2,6 @@ import 'package:pagination/model.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:pagination/bloc.dart';
-import './main.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,17 +19,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-class _MyHomePageState extends State<MyHomePage> {
-  Future<Photo> syncLock;// VERY IMPORTANT TO serve list view items sequentially
-  Future<Photo> getPhoto(int index) async {
-    if(syncLock != null) await syncLock; // Check out what's happening, if you uncomment this
-    syncLock = MyApp.bloc.getPhoto(index);
-    return await syncLock;
-  }
+class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: ListView.builder(
         itemBuilder: (context, index) => FutureBuilder(
-          future:getPhoto(index),
+          future:MyApp.bloc.getPhoto(index),
           builder: (context,snapshot) {
             Widget listItem = Container(
                   margin: EdgeInsets.all(8),
