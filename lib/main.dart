@@ -20,59 +20,16 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// class PhotoListItem extends StatefulWidget {
-//   final int index;
-//   PhotoListItem(this.index);
-//   @override
-//   _PhotoListItemState createState() => _PhotoListItemState();
-// }
-// class _PhotoListItemState extends State<PhotoListItem> {
-//   bool _loading = false;
-//   Photo _photo;
-//   Future getPhoto(int index) async {
-//     setState(() {
-//       _loading = true;      
-//     });
-//     await Future.delayed(Duration(seconds: 1));
-//     // _photo = await MyApp.bloc.getPhoto(index);
-//     _photo = Photo(id: index,title: "Photo for $index",thumbnailUrl: "https://via.placeholder.com/150/92c952");
-//     setState(() {
-//       _loading = false;      
-//     });
-//   }
-//   @override
-//   Widget build(BuildContext context) {
-//     getPhoto(this.widget.index);
-//     return _loading
-//       ? Container(
-//           margin: EdgeInsets.all(8),
-//           child: Center(
-//             child: CircularProgressIndicator(),
-//           ),
-//         )
-//       : ListTile(
-//           leading: CircleAvatar(
-//             child: Image.network(_photo.thumbnailUrl),
-//           ),
-//           title: Text(_photo.id.toString()),
-//           subtitle: Text(_photo.title),
-//         );
-//   }
-// }
-
 class MyHomePage extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 class _MyHomePageState extends State<MyHomePage> {
-  Future<Photo> runningGetPhoto;
+  Future<Photo> syncLock;// VERY IMPORTANT TO serve list view items sequentially
   Future<Photo> getPhoto(int index) async {
-    print("Entering _MyHomePageState.getPhoto for index $index");
-    if(runningGetPhoto != null) await runningGetPhoto;
-    // print("Calling _MyHomePageState.getPhoto for index $index");
-    runningGetPhoto = MyApp.bloc.getPhoto(index);
-    // print("Awaiting _MyHomePageState.getPhoto for index $index");
-    return await runningGetPhoto;
+    if(syncLock != null) await syncLock; // Check out what's happening, if you uncomment this
+    syncLock = MyApp.bloc.getPhoto(index);
+    return await syncLock;
   }
   @override
   Widget build(BuildContext context) {
@@ -97,12 +54,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 break; 
               case ConnectionState.done:
                 Photo photo = snapshot.data;
-                print("Done _MyHomePageState.builder for index $index photo ${photo.id}");
+                // print("Done _MyHomePageState.builder for index $index photo ${photo.id}");
                 listItem = ListTile(
                   leading: CircleAvatar(
                     child: Image.network(photo.thumbnailUrl),
                   ),
-                  title: Text("${photo.id} - $index"),
+                  title: Text("Photo ID ${photo.id} - Index $index"),
                   subtitle: Text(photo.title),
                 );
             }
