@@ -29,31 +29,21 @@ class MyHomePage extends StatelessWidget {
       body: ListView.builder(
         itemBuilder: (context, index) => FutureBuilder(
           future:MyApp.bloc.getPhoto(index),
-          builder: (context,snapshot) {
-            Widget listItem = Container(
+          builder: (context,snapshot) => snapshot.connectionState == ConnectionState.done
+            ? ListTile(
+                  leading: CircleAvatar(
+                    child: Image.network(snapshot.data.thumbnailUrl),
+                  ),
+                  title: Text("Photo ID ${snapshot.data.id} - Index $index"),
+                  subtitle: Text(snapshot.data.title),
+                )
+            : Container(
                   margin: EdgeInsets.all(8),
                   child: Center(
                     child: CircularProgressIndicator(),
                   ),
-                );
-            switch(snapshot.connectionState){
-              case ConnectionState.none:
-              case ConnectionState.active:
-              case ConnectionState.waiting:
-                break; 
-              case ConnectionState.done:
-                Photo photo = snapshot.data;
-                // print("Done _MyHomePageState.builder for index $index photo ${photo.id}");
-                listItem = ListTile(
-                  leading: CircleAvatar(
-                    child: Image.network(photo.thumbnailUrl),
-                  ),
-                  title: Text("Photo ID ${photo.id} - Index $index"),
-                  subtitle: Text(photo.title),
-                );
-            }
-            return listItem;
-          })
+                )
+          )
       ),
     );
   }
