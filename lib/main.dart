@@ -1,5 +1,3 @@
-import 'package:pagination/model.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:pagination/bloc.dart';
 
