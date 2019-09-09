@@ -31,18 +31,18 @@ class MyHomePage extends StatelessWidget {
           future:MyApp.bloc.getPhoto(index),
           builder: (context,snapshot) => snapshot.connectionState == ConnectionState.done
             ? ListTile(
-                  leading: CircleAvatar(
-                    child: Image.network(snapshot.data.thumbnailUrl),
-                  ),
-                  title: Text("Photo ID ${snapshot.data.id} - Index $index"),
-                  subtitle: Text(snapshot.data.title),
-                )
+                leading: CircleAvatar(
+                  child: Image.network(snapshot.data.thumbnailUrl),
+                ),
+                title: Text("Photo ID ${snapshot.data.id} - Index $index"),
+                subtitle: Text(snapshot.data.title),
+              )
             : Container(
-                  margin: EdgeInsets.all(8),
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                )
+                margin: EdgeInsets.all(8),
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              )
           )
       ),
     );
