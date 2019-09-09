@@ -1,15 +1,11 @@
 # pagination
 
-This is a rework of the original Tensor Programming Flutter navigation project.
-I think there is a much simpler solution than his original solution.
-No need for streams, stream-builders, rx-dart, scroll notifications.
-When I learned how brilliantly sliver list handles unbound lists, I think forward and backward paging can be done easily.
-My idea is just load up to three pages altogether in memory. When a HTTP request is pending no any other request is allowed. When backward paging, I'd keep the previous page in memory, but when the user starts paging in that direction I'd start loading the previous page, dropping the trailing pages at the sae time, So eventually three pages would be kept in memory.
-
-I committed a version with message "Managing photo buffer with Current Position doesn't work :(" and it really doesn't, because of the intricacies of race situations, which I wasn't able to decypher.
-Serializing async calls was possible but it wasn't enough for a working solution.
-
-In the next iteration I am planning to use a list for all indexes already loaded, and when the list view request the item I return it. The fisrt version will keep all photos/albums ever loaded in memory. Later I'll try to remove the actual data of the albums/pages from the beginning and end of the list while keeping the mapping list (index, id, page/album, data/photo, which is set to null after memory consumption optimization). When the data is needed, the corresponding album is going to be reloaded.
+This is a rework of the original [Tensor Programming Flutter navigation project](https://github.com/tensor-programming/flutter-pagination-tutorial).
+I think there is a kind-of much simpler solution than his original solution:
+no need for streams, stream-builders, rx-dart, neither scroll notifications.
+My solution is based on FutureBuilder and async/await.
+When I [learned how brilliantly sliver list](https://www.youtube.com/watch?v=wN2lpqxkB4M) handles unbound number of items, I think forward and backward paging can be done easily.
+My idea was just load up pages when list bulder is requesting items. When a HTTP request is pending, no any other request is allowed, which was a challenge with Dart's async/await. For backward paging, I'd keep all pages in memory.
 
 The commit "Excellently working simple solution with two future-awaiting-sync-locks" is based on two very important syncronizations trick:
 - getPhoto in MyHomePage
