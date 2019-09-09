@@ -34,15 +34,4 @@ With this solution it was possible to change the home page into a stateless widg
 
 The solution works excellently, but it keeps all data in memory, it doesn't drop pages, which is pretty OK and mostly desirable for 99% of the situations.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+For a demo and explanation check out the video [Flutter 96 Unbounded/Infinite Pagination with Future Builder and List View](https://youtu.be/fCOhWlDiwCE)
