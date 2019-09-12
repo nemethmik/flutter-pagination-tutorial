@@ -25,9 +25,12 @@ class MyHomePage extends StatelessWidget {
         title: Text("Pagination App"),
       ),
       body: ListView.builder(
-        itemBuilder: (context, index) => FutureBuilder(
-          future:MyApp.bloc.getPhoto(index),
-          builder: (context,snapshot) => snapshot.connectionState == ConnectionState.done
+        itemBuilder: (context, index) { 
+        // print("ListView itemBuilder for $index");
+        return StreamBuilder(
+          stream: MyApp.bloc.fetchPhoto(index),
+          builder: (context,snapshot) {
+            return snapshot.connectionState == ConnectionState.active
             ? ListTile(
                 leading: CircleAvatar(
                   child: Image.network(snapshot.data.thumbnailUrl),
@@ -40,9 +43,28 @@ class MyHomePage extends StatelessWidget {
                 child: Center(
                   child: CircularProgressIndicator(),
                 ),
-              )
-          )
+              );
+            }
+          );
+        }
       ),
     );
   }
 }
+        // FutureBuilder(
+        //   future:MyApp.bloc.getPhoto(index),
+        //   builder: (context,snapshot) => snapshot.connectionState == ConnectionState.done
+        //     ? ListTile(
+        //         leading: CircleAvatar(
+        //           child: Image.network(snapshot.data.thumbnailUrl),
+        //         ),
+        //         title: Text("Photo ID ${snapshot.data.id} - Index $index"),
+        //         subtitle: Text(snapshot.data.title),
+        //       )
+        //     : Container(
+        //         margin: EdgeInsets.all(8),
+        //         child: Center(
+        //           child: CircularProgressIndicator(),
+        //         ),
+        //       )
+        //   )

@@ -35,3 +35,6 @@ With this solution it was possible to change the home page into a stateless widg
 The solution works excellently, but it keeps all data in memory, it doesn't drop pages, which is pretty OK and mostly desirable for 99% of the situations.
 
 For a demo and explanation check out the video [Flutter 96 Unbounded/Infinite Pagination with Future Builder and List View](https://youtu.be/fCOhWlDiwCE)
+
+# Stream Builder Doesn't Seem to be Working with Fine with Unbounded List Views
+The bloc provides data perfectly to the list view in branch 0911-streams-version, but list view is not really willing to work with stream builder lines. 
