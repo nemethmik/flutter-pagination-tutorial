@@ -7,6 +7,10 @@ class MyApp extends StatelessWidget {
   static final PhotoBloc bloc = PhotoBloc();
   @override
   Widget build(BuildContext context) {
+    // For testing dispose, the bloc is killed in 5 seconds.
+    // But, since it was programed in a defensive way, the bloc automatically re-created
+    // its infrastructure to serve the list view.
+    Future.delayed(Duration(seconds: 5)).then((v)=>bloc.dispose());
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -27,10 +31,11 @@ class MyHomePage extends StatelessWidget {
       body: ListView.builder(
         itemBuilder: (context, index) { 
         // print("ListView itemBuilder for $index");
-        return StreamBuilder(
-          stream: MyApp.bloc.fetchPhoto(index),
-          builder: (context,snapshot) {
-            return snapshot.connectionState == ConnectionState.active
+        return FutureBuilder(
+          future: MyApp.bloc.fetchPhotoAsync(index),
+          builder: (context,snapshot) { 
+            // print("Future Builder for $index state ${snapshot.connectionState} data ${snapshot.data}" );
+            return snapshot.connectionState == ConnectionState.done
             ? ListTile(
                 leading: CircleAvatar(
                   child: Image.network(snapshot.data.thumbnailUrl),
@@ -43,28 +48,10 @@ class MyHomePage extends StatelessWidget {
                 child: Center(
                   child: CircularProgressIndicator(),
                 ),
-              );
-            }
+              );}
           );
         }
       ),
     );
   }
 }
-        // FutureBuilder(
-        //   future:MyApp.bloc.getPhoto(index),
-        //   builder: (context,snapshot) => snapshot.connectionState == ConnectionState.done
-        //     ? ListTile(
-        //         leading: CircleAvatar(
-        //           child: Image.network(snapshot.data.thumbnailUrl),
-        //         ),
-        //         title: Text("Photo ID ${snapshot.data.id} - Index $index"),
-        //         subtitle: Text(snapshot.data.title),
-        //       )
-        //     : Container(
-        //         margin: EdgeInsets.all(8),
-        //         child: Center(
-        //           child: CircularProgressIndicator(),
-        //         ),
-        //       )
-        //   )

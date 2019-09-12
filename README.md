@@ -36,5 +36,16 @@ The solution works excellently, but it keeps all data in memory, it doesn't drop
 
 For a demo and explanation check out the video [Flutter 96 Unbounded/Infinite Pagination with Future Builder and List View](https://youtu.be/fCOhWlDiwCE)
 
-# Stream Builder Doesn't Seem to be Working with Fine with Unbounded List Views
+# Stream Builder Doesn't Seem to be Working with Fine with Unbounded List View Items
 The bloc provides data perfectly to the list view in branch 0911-streams-version, but list view is not really willing to work with stream builder lines. 
+
+# 0912-streams-with-futurebuilder (This is the Real Stuff)
+This is masterpiece of mine on my journey to learn Flutter/Dart. This version combines streams and futures along with future builder all working for a list view builder with unbounded lazily paginated loading of data.
+
+This shows how to run an infine looping asynchronously executed queue processor following the producer consumer pattern.
+fetchPhotoAsync is the producer triggered by the requests from the list view builder, and the photoRequestProcessorAsync is the consumer of the request stream, which while processing requests it fills the response queue, which is consumed by the future builder widgets created for each list view items. Brilliant classic solution, sure. 
+
+For fun, I used StreamQueue from the [async](https://pub.dev/packages/async#-installing-tab-) package, which is not the same as dart:async.
+
+The accompanying explanation video is [Flutter 94 List View Unbounded Pagination with Streams and Future Builder](https://youtu.be/mKoWYStAvBM)
+
